@@ -4,12 +4,14 @@ import java.sql.*;
 
 public class EmpleadoDAO {
     private static final String JDBC_URL = "jdbc:oracle:thin:@(description=(retry_count=1)(retry_delay=1)(address=(protocol=tcps)(port=1522)(host=adb.sa-santiago-1.oraclecloud.com))(connect_data=(service_name=g5ba5f1a88b3f4d_poli_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))";
-    private static final String USERNAME = "POLI";
-    private static final String PASSWORD = "xSK3t5j9Q7NEAMn";
+    private static final String USERNAME = "ADMIN";// "POLI";
+    private static final String PASSWORD = "Politecnico123";// "xSK3t5j9Q7NEAMn";
 
-    public void insertarEmpleado(Empleado empleado) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
-            String query = "INSERT INTO empleados (empl_primer_nombre, empl_segundo_nombre, empl_email, empl_fecha_nac, empl_sueldo, empl_comision, empl_cargo_ID, empl_gerente_ID, empl_dpto_ID) " +
+    public boolean insertarEmpleado(Empleado empleado) {
+        try {
+            Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+            String query = "INSERT INTO empleados (empl_primer_nombre, empl_segundo_nombre, empl_email, empl_fecha_nac, empl_sueldo, empl_comision, empl_cargo_ID, empl_gerente_ID, empl_dpto_ID) "
+                    +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, empleado.getPrimerNombre());
@@ -23,14 +25,18 @@ public class EmpleadoDAO {
             statement.setInt(9, empleado.getDptoID());
 
             statement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    public void actualizarEmpleado(Empleado empleado) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
-            String query = "UPDATE empleados SET empl_primer_nombre = ?, empl_segundo_nombre = ?, empl_email = ?, empl_fecha_nac = ?, empl_sueldo = ?, empl_comision = ?, empl_cargo_ID = ?, empl_gerente_ID = ?, empl_dpto_ID = ? " +
+    public boolean actualizarEmpleado(Empleado empleado) {
+        try {
+            Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+            String query = "UPDATE empleados SET empl_primer_nombre = ?, empl_segundo_nombre = ?, empl_email = ?, empl_fecha_nac = ?, empl_sueldo = ?, empl_comision = ?, empl_cargo_ID = ?, empl_gerente_ID = ?, empl_dpto_ID = ? "
+                    +
                     "WHERE empl_ID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, empleado.getPrimerNombre());
@@ -45,8 +51,10 @@ public class EmpleadoDAO {
             statement.setInt(10, empleado.getID());
 
             statement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -77,14 +85,16 @@ public class EmpleadoDAO {
         return empleado;
     }
 
-    public void borrarEmpleado(int empleadoID) {
+    public boolean borrarEmpleado(int empleadoID) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
             String borrarQuery = "DELETE FROM empleados WHERE empl_ID = ?";
             PreparedStatement borrarStatement = connection.prepareStatement(borrarQuery);
             borrarStatement.setInt(1, empleadoID);
             borrarStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

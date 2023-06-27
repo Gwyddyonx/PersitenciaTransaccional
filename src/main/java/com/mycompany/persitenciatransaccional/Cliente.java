@@ -43,15 +43,15 @@ public class Cliente {
     public static void main(String[] args) throws IOException {
         try {
             Scanner escaner = new Scanner(System.in);
-            System.out.println("Usuario");
+            System.out.print("- Ingresa el usuario Usuario:");
             String nombreUsuario = escaner.nextLine();
-            System.out.println("IP de usuario");
+            System.out.print("- Ingresa IP de usuario:");
             String ipUsuario = escaner.nextLine();
-            System.out.println("Puerto");
+            System.out.print("- Ingresa el Puerto:");
             int puerto = escaner.nextInt();
             Socket socket = new Socket(ipUsuario, puerto);
             Cliente cliente = new Cliente(socket, nombreUsuario);
-            System.out.println("Te haz unido al chat");
+            //System.out.println("Te haz unido al chat");
             cliente.canalEnviarYRecibir();
             cliente.enviarMensaje();
 
@@ -91,7 +91,7 @@ public class Cliente {
                         mensajeChat = leer.readLine();
                         if (mensajeChat == null || mensajeChat.equalsIgnoreCase(nombreUsuario + " chao")) {
                             cerrarTodo(socket, leer, escribir);
-                            System.out.println("Has abandonado el chat");
+                            //System.out.println("Has abandonado el chat");
                             exit(0);
                         }
                         System.out.println(mensajeChat);
